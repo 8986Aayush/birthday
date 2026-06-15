@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday 🎂</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #fff0f8;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+    }
+
+    #confetti-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      border-radius: 2px;
+      animation: fall linear infinite;
+      top: -20px;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    .bday-wrap {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      max-width: 560px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .step { display: none; animation: fadeIn 0.6s ease; }
+    .step.visible { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .big-emoji { font-size: 72px; display: block; margin: 1rem 0; }
+
+    .hero-title {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.2rem;
+      color: #d4327a;
+      margin: 0.5rem 0;
+      line-height: 1.3;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: #888;
+      margin: 0.5rem 0 1.5rem;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #f857a6, #d4327a);
+      color: white;
+      border: none;
+      padding: 14px 36px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      margin: 0.5rem;
+      box-shadow: 0 4px 20px rgba(212,50,122,0.3);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn:hover { transform: scale(1.05); box-shadow: 0 6px 28px rgba(212,50,122,0.45); }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #d4327a;
+      color: #d4327a;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 0.5rem;
+      transition: all 0.2s;
+    }
+    .btn-outline:hover { background: #d4327a; color: white; }
+
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #f857a6, #d4327a);
+      border-radius: 4px;
+      margin: 1.5rem auto;
+    }
+
+    .progress-wrap { max-width: 200px; margin: 0.5rem auto 0; }
+    .progress {
+      height: 5px;
+      background: #fce0ee;
+      border-radius: 4px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f857a6, #d4327a);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+    .progress-label { font-size: 0.75rem; color: #aaa; margin-top: 6px; }
+
+    /* Editable spans */
+    .editable {
+      outline: none;
+      border-bottom: 2px dashed #f4a0c8;
+      min-width: 80px;
+      display: inline-block;
+      cursor: text;
+      transition: border-color 0.2s, background 0.2s;
+      padding: 0 4px;
+      border-radius: 4px;
+    }
+    .editable:focus { border-color: #d4327a; background: rgba(212,50,122,0.07); }
+    .edit-hint { font-size: 0.78rem; color: #bbb; margin-top: 8px; display: block; }
+
+    /* Wish card */
+    .wish-section {
+      background: white;
+      border: 2px dashed #f4a0c8;
+      border-radius: 16px;
+      padding: 1.5rem;
+      max-width: 480px;
+      margin: 1rem auto;
+      cursor: text;
+      text-align: left;
+    }
+    .wish-section p {
+      font-size: 1rem;
+      color: #5a2040;
+      line-height: 1.85;
+    }
+
+    /* Reasons grid */
+    .reasons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      max-width: 480px;
+      margin: 1rem auto;
+    }
+    .reason-pill {
+      background: white;
+      border: 1.5px solid #f4a0c8;
+      border-radius: 50px;
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      color: #6b2d4e;
+      cursor: text;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .reason-pill:focus { border-color: #d4327a; background: #fff0f8; }
+
+    /* Cards */
+    .card {
+      background: white;
+      border: 1px solid #f4c0d8;
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      max-width: 480px;
+      margin: 0.75rem auto;
+      text-align: left;
+    }
+    .card h3 {
+      font-family: 'Pacifico', cursive;
+      color: #d4327a;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      font-weight: 400;
+    }
+    .card p { color: #444; font-size: 0.97rem; line-height: 1.7; }
+
+    /* Fireworks */
+    .fw-dot {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+    }
+
+    @media (max-width: 480px) {
+      .hero-title { font-size: 1.7rem; }
+      .reasons-grid { grid-template-columns: 1fr; }
+      .big-emoji { font-size: 56px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="confetti-container"></div>
+
+<div class="bday-wrap">
+
+  <!-- STEP 0: Knock knock -->
+  <div id="step0" class="step visible">
+    <span class="big-emoji">🚪</span>
+    <h1 class="hero-title" style="font-size:1.9rem;">Knock knock...</h1>
+    <p class="subtitle">Someone left something very special here for you 👀</p>
+    <button class="btn" onclick="goStep(1)">Who's there? 🎉</button>
+  </div>
+
+  <!-- STEP 1: Reveal -->
+  <div id="step1" class="step">
+    <span class="big-emoji">🎂</span>
+    <h1 class="hero-title">
+      Happy Birthday,<br>
+      <span class="editable" contenteditable="true" id="her-name">Your Name</span>!
+    </h1>
+    <p class="subtitle">Today the world is celebrating its best decision ever 🌟</p>
+    <div class="divider"></div>
+    <div class="progress-wrap">
+      <div class="progress"><div class="progress-fill" id="prog" style="width:10%"></div></div>
+      <p class="progress-label" id="prog-label">Just getting started...</p>
+    </div>
+    <br>
+    <button class="btn" onclick="goStep(2)">There's more! 🎁</button>
+    <span class="edit-hint">✏️ Click on "Your Name" to personalize!</span>
+  </div>
+
+  <!-- STEP 2: Love message -->
+  <div id="step2" class="step">
+    <span class="big-emoji">💌</span>
+    <h2 class="hero-title" style="font-size:1.5rem;">A little note from me</h2>
+    <div class="wish-section" onclick="makeEditable(this)">
+      <p id="wish-text" contenteditable="false">Hey you, happy birthday ❤️ I don't really know how to put into words what you mean to me — but today I just want you to feel all of it. You make every ordinary day feel a little brighter just by being in it. I'm really lucky to know you. Hope today is as beautiful as you are. 🎈</p>
+    </div>
+    <span class="edit-hint">✏️ Click the message above to edit it!</span>
+    <div class="divider"></div>
+    <button class="btn" onclick="goStep(3)">Keep reading 💕</button>
+  </div>
+
+  <!-- STEP 3: Reasons -->
+  <div id="step3" class="step">
+    <span class="big-emoji">✨</span>
+    <h2 class="hero-title" style="font-size:1.5rem;">Reasons you're amazing</h2>
+    <div class="reasons-grid">
+      <div class="reason-pill" contenteditable="true">😂 Makes me laugh</div>
+      <div class="reason-pill" contenteditable="true">🧠 So damn smart</div>
+      <div class="reason-pill" contenteditable="true">💪 Incredibly strong</div>
+      <div class="reason-pill" contenteditable="true">🎨 Endlessly creative</div>
+      <div class="reason-pill" contenteditable="true">🌻 Lights up a room</div>
+      <div class="reason-pill" contenteditable="true">🤝 Always there for me</div>
+    </div>
+    <span class="edit-hint">✏️ Click any reason to make it personal!</span>
+    <div class="divider"></div>
+    <button class="btn" onclick="goStep(4)">One more thing... 🎉</button>
+  </div>
+
+  <!-- STEP 4: Final -->
+  <div id="step4" class="step">
+    <span class="big-emoji">🥳</span>
+    <h2 class="hero-title">This year is yours</h2>
+    <div class="card">
+      <h3>My wish for you 🌙</h3>
+      <p contenteditable="true">May this birthday be the beginning of the most beautiful chapter of your life. More laughs, more adventures, more moments that make your heart full. You deserve every bit of it — and I'll be right there cheering you on. 💫</p>
+    </div>
+    <div class="card">
+      <h3>With all my love 💝</h3>
+      <p>From: <span class="editable" contenteditable="true">Your Name</span></p>
+    </div>
+    <br>
+    <button class="btn" onclick="launchFireworks()">🎆 Launch fireworks!</button>
+    <button class="btn-outline" onclick="goStep(0)">Start over 🔄</button>
+  </div>
+
+</div>
+
+<script>
+  const progWidths  = ['10%','35%','60%','85%','100%'];
+  const progLabels  = ['Just getting started...','Halfway there...','Almost done...','The best part is next...',''];
+  let current = 0;
+
+  function goStep(n) {
+    document.getElementById('step' + current).classList.remove('visible');
+    current = n;
+    const el = document.getElementById('step' + n);
+    el.classList.add('visible');
+    if (n === 1) {
+      spawnConfetti();
+      setTimeout(() => {
+        document.getElementById('prog').style.width = '10%';
+        document.getElementById('prog-label').textContent = 'Just getting started...';
+      }, 100);
+    }
+    if (n > 1) {
+      setTimeout(() => {
+        const p = document.getElementById('prog');
+        const l = document.getElementById('prog-label');
+        if (p) { p.style.width = progWidths[n - 1]; }
+        if (l) { l.textContent = progLabels[n - 1]; }
+      }, 300);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function makeEditable(container) {
+    const p = container.querySelector('p');
+    if (p) { p.contentEditable = 'true'; p.focus(); }
+  }
+
+  function spawnConfetti() {
+    const colors = ['#f857a6','#d4327a','#ffd700','#ff8c42','#a78bfa','#34d399','#60a5fa','#fb7185'];
+    const cont = document.getElementById('confetti-container');
+    cont.innerHTML = '';
+    for (let i = 0; i < 40; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti-piece';
+      const size = 6 + Math.random() * 10;
+      c.style.cssText = `
+        left:${Math.random() * 100}%;
+        background:${colors[Math.floor(Math.random() * colors.length)]};
+        animation-duration:${2.5 + Math.random() * 3}s;
+        animation-delay:${Math.random() * 2}s;
+        width:${size}px;
+        height:${size}px;
+        border-radius:${Math.random() > 0.5 ? '50%' : '2px'};
+      `;
+      cont.appendChild(c);
+    }
+  }
+
+  function launchFireworks() {
+    spawnConfetti();
+    const colors = ['#f857a6','#ffd700','#34d399','#60a5fa','#a78bfa','#ff8c42'];
+    for (let i = 0; i < 24; i++) {
+      setTimeout(() => {
+        const fw = document.createElement('div');
+        fw.className = 'fw-dot';
+        fw.style.cssText = `
+          left:${15 + Math.random() * 70}%;
+          top:${10 + Math.random() * 65}%;
+          background:${colors[Math.floor(Math.random() * colors.length)]};
+        `;
+        document.body.appendChild(fw);
+        setTimeout(() => {
+          fw.style.transform = `scale(${5 + Math.random() * 8})`;
+          fw.style.opacity = '0';
+        }, 30);
+        setTimeout(() => fw.remove(), 700);
+      }, i * 90);
+    }
+  }
+
+  // Start confetti on load
+  spawnConfetti();
+</script>
+</body>
+</html>
